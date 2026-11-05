@@ -9,7 +9,7 @@ const maxA=renderer.capabilities.getMaxAnisotropy();
 /* one light, upper left, agrees with every shadow */
 const hemi=new T.HemisphereLight('#fff','#776',0),key=new T.DirectionalLight('#fff4e4',0);key.position.set(-6,9,9);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-12,right:12,top:8,bottom:-4,far:30});key.shadow.radius=6;key.shadow.bias=-.0004;scene.add(hemi,key,key.target);
 const wallM=new T.MeshBasicMaterial({color:'#000'}),wall=new T.Mesh(new T.PlaneGeometry(120,40),wallM);wall.position.set(20,4,-.9);scene.add(wall);const shade=new T.Mesh(new T.PlaneGeometry(120,40),new T.ShadowMaterial({opacity:.3}));shade.position.set(20,4,-.89);shade.receiveShadow=true;scene.add(shade);
-const woodM=new T.MeshStandardMaterial({color:'#2a1712',roughness:.6}),shelf=new T.Mesh(new T.BoxGeometry(120,.26,1.9),woodM);shelf.position.set(20,-.13,.05);shelf.receiveShadow=true;shelf.castShadow=true;scene.add(shelf);
+const woodM=new T.MeshStandardMaterial({color:'#2a1712',roughness:.6,transparent:true}),shelf=new T.Mesh(new T.BoxGeometry(120,.26,1.9),woodM);shelf.position.set(20,-.13,.05);shelf.receiveShadow=true;shelf.castShadow=true;scene.add(shelf);
 const uiCol=c=>{document.documentElement.style.setProperty('--ink',c)};
 function noise(x,w,h,a){const d=x.getImageData(0,0,w,h),p=d.data;for(let i=0;i<p.length;i+=4){const n=(Math.random()-.5)*a;p[i]+=n;p[i+1]+=n;p[i+2]+=n}x.putImageData(d,0,0)}
 const img=src=>new Promise(r=>{const i=new Image;i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src});
@@ -78,12 +78,12 @@ async function openBook(i){if(state.mode!=='shelf'||turning)return;state.mode='b
  const[tl,tr]=await Promise.all([pageCanvas(b,-1),pageCanvas(b,0)]);pL.material.map=tl;pR.material.map=tr;pL.material.needsUpdate=pR.material.needsUpdate=true;
  spread.position.set(r.g.position.x-BW/2+.0,r.h/2,BT/2+.03);spread.visible=false;
  bookCam(reduce?0:1.1);panel();G.killTweensOf($('#panel'));G.fromTo('#panel',{opacity:0,x:reduce?0:30},{opacity:1,x:0,duration:.6,delay:reduce?0:.45,ease:'power3.out'});
- books.forEach(o=>{if(o!==r)G.to(o.g.position,{x:o.i*GAP+(o.i<r.i?-5:5),duration:.8,ease:'power3.inOut'})});
+ books.forEach(o=>{if(o!==r)G.to(o.g.position,{x:o.i*GAP+(o.i<r.i?-5:5),duration:.8,ease:'power3.inOut'})});G.to(woodM,{opacity:0,duration:reduce?0:.6,delay:reduce?0:.2,onComplete(){shelf.visible=false}});
  G.timeline().to(r.g.position,{x:r.i*GAP+BW/2,z:.25,y:.02,duration:reduce?0:.9,ease:'power3.inOut',onUpdate(){spread.position.x=r.g.position.x-BW/2;spread.position.z=r.g.position.z+BT/2+.03}},0)
   .to(r.hinge.rotation,{y:-Math.PI,duration:reduce?0:1,ease:'power3.inOut',onComplete(){spread.visible=true}},.1).to(r.hinge.scale,{y:.986,duration:reduce?0:.8},.2);
  bookCam(reduce?0:1.1)}
 function closeBook(){if(state.mode!=='book'||turning)return;const r=books[state.open];G.to('#panel',{opacity:0,duration:.25});[ovL,ovR].forEach(o=>placeOver(o,null));spread.visible=false;r.front.visible=true;state.mode='closing';document.body.classList.remove('booked');
- books.forEach(o=>{if(o!==r)G.to(o.g.position,{x:o.i*GAP,duration:.85,ease:'power3.inOut'})});G.timeline({onComplete(){state.mode='shelf';state.open=null}}).to(r.hinge.rotation,{y:0,duration:.8,ease:'power3.inOut'},0).to(r.hinge.scale,{y:1,duration:.5},0).to(r.g.position,{x:r.i*GAP,z:0,y:0,duration:.8,ease:'power3.inOut'},0);
+ books.forEach(o=>{if(o!==r)G.to(o.g.position,{x:o.i*GAP,duration:.85,ease:'power3.inOut'})});shelf.visible=true;G.to(woodM,{opacity:1,duration:.6,delay:.25});G.timeline({onComplete(){state.mode='shelf';state.open=null}}).to(r.hinge.rotation,{y:0,duration:.8,ease:'power3.inOut'},0).to(r.hinge.scale,{y:1,duration:.5},0).to(r.g.position,{x:r.i*GAP,z:0,y:0,duration:.8,ease:'power3.inOut'},0);
  const p=shelfPose();G.to(camBase,{...p,duration:.9,ease:'power3.inOut',overwrite:true})}
 /* spreads: 0 = endpaper + title; n = pages */
 const spreadPages=s=>s===0?[-1,0]:[2*s-1,2*s];
