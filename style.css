@@ -1,0 +1,68 @@
+@font-face{font-family:News;src:url(fonts/news-400.woff2);font-display:swap}
+@font-face{font-family:News;font-style:italic;src:url(fonts/news-400i.woff2);font-display:swap}
+@font-face{font-family:Lab;src:url(fonts/inter-500.woff2);font-display:swap}
+:root{--ink:#fff}
+*{box-sizing:border-box;margin:0}html,body{height:100%;overflow:hidden;background:#000;color:var(--ink);font-family:News,Georgia,serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block}
+#reel{position:fixed;inset:0;background:#000;z-index:5}#reel video{width:100%;height:100%;object-fit:contain;display:block}
+#floor{position:absolute;inset:0;opacity:0;pointer-events:none;background:radial-gradient(ellipse 46% 13% at 50% 100%,#9c3009 0%,#5a1a05 45%,transparent 100%)}
+#reelui{position:absolute;left:0;right:0;bottom:28px;display:flex;justify-content:center;gap:12px}
+#reelui button,#replay,#open{font:500 12px/1 Lab,sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:14px 22px;border-radius:99px}
+#snd{background:#fcf2e0;color:#111}#skip{border:1px solid #ffffff66;color:#fff}
+#top{position:fixed;left:40px;right:40px;top:28px;display:flex;justify-content:space-between;align-items:flex-start;z-index:3;opacity:0;pointer-events:none;transition:color .6s}
+#top .mark{font-size:22px;line-height:1.2}#top .mark span{display:block;font-size:15px;font-style:italic}
+#replay{border:1px solid currentColor;padding:11px 16px}
+#top .right{display:flex;align-items:center;gap:22px}
+#reach{display:flex;gap:20px;font-size:16px}
+#reach a{color:inherit;text-decoration:none;padding:12px 0}
+#reach a:hover{text-decoration:underline;text-underline-offset:4px}
+#reach .short{display:none}
+body.booked #reach{opacity:0;pointer-events:none}
+#nav{position:fixed;left:0;right:0;bottom:30px;display:flex;justify-content:center;align-items:center;gap:14px;z-index:3;opacity:0;pointer-events:none;transition:color .6s}
+#nav>button{font-size:26px;width:44px;height:44px;line-height:1}
+#open{font-size:12px!important;width:auto!important;height:auto!important;border:1px solid currentColor}
+#label{position:absolute;left:40px;bottom:6px;font-size:18px;font-style:italic}
+body.shelf #top,body.shelf #nav{opacity:1;pointer-events:auto}
+body.booked #nav,body.booked #top .mark span,body.booked #replay{opacity:0;pointer-events:none}
+#tip{position:fixed;z-index:4;background:#fcf2e0;color:#16120c;padding:8px 12px;pointer-events:none;opacity:0;transition:opacity .15s;font-size:18px;box-shadow:0 8px 24px #0005}
+#tip small{display:block;font:500 9px/1.5 Lab,sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+#panel{position:fixed;z-index:4;top:0;bottom:0;right:0;width:min(42vw,560px);padding:clamp(28px,6vh,72px) clamp(28px,4vw,64px);display:flex;flex-direction:column;justify-content:center;opacity:0;pointer-events:none;overflow:auto}
+body.booked #panel{pointer-events:auto}
+#panel .vol{font:500 12px/1 Lab,sans-serif;letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px}
+#panel h1{font-weight:400;font-size:clamp(44px,5.4vw,84px);line-height:1;letter-spacing:-.02em}
+#panel .sub{font-style:italic;font-size:22px;margin:14px 0 24px}
+#panel .tx{font-size:18px;line-height:1.5;max-width:40ch}
+#panel .tx+.tx{margin-top:10px}
+#panel ol{list-style:none;padding:0;margin:26px 0 0;border-top:1px solid color-mix(in srgb,currentColor 30%,transparent)}
+#panel li button{display:flex;justify-content:space-between;width:100%;padding:10px 0;font-size:17px;border-bottom:1px solid color-mix(in srgb,currentColor 30%,transparent);text-align:left}
+#panel li button span{font:500 12px/1.8 Lab,sans-serif;letter-spacing:.08em}
+#panel li.on button{font-style:italic}
+.pn{display:flex;align-items:center;justify-content:space-between;margin-top:22px}
+.pn button.a{width:44px;height:44px;border:1px solid currentColor;border-radius:50%;font-size:20px;line-height:1}
+.pn button[disabled]{opacity:.3;cursor:default}
+.pn div{text-align:center;font-size:17px}.pn div small{display:block;font:500 12px/1.8 Lab,sans-serif;letter-spacing:.1em}
+.contact+.contact{margin-top:10px}
+.bot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font:500 12px/1.5 Lab,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.bot button{letter-spacing:inherit;text-transform:inherit;padding:14px 0}
+.bot .cr{letter-spacing:.04em;text-transform:none;font-size:11px}
+.contact{display:block;margin-top:22px;padding:14px 16px;border:1px solid currentColor;font-size:20px;color:inherit;text-decoration:none}
+#light{position:fixed;inset:0;z-index:9;background:#0b0a09f2;display:grid;grid-template-rows:1fr auto;place-items:center;padding:28px 80px 18px;color:#fcf2e0}
+#light[hidden]{display:none}
+#lstage{min-height:0;height:100%;width:100%;display:flex;align-items:center;justify-content:center}
+#lstage img,#lstage video{max-width:100%;max-height:100%;display:block;background:#000}
+#lcap{font-style:italic;font-size:17px;padding-top:12px}
+#lx{position:absolute;right:24px;top:20px;font:500 11px/1 Lab,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:12px}
+#lp,#ln{position:absolute;top:50%;margin-top:-26px;width:52px;height:52px;font-size:32px}#lp{left:14px}#ln{right:14px}
+@media (max-width:760px),(max-aspect-ratio:1/1){
+ #top{left:18px;right:18px;top:16px}#top .right{flex-direction:column;align-items:flex-end;gap:2px}#reach{font-size:15px;gap:16px;order:2}#reach .full{display:none}#reach .short{display:inline}#label{left:0;right:0;bottom:60px;text-align:center}
+ #panel{top:auto;left:0;right:0;width:auto;height:50%;padding:18px;justify-content:flex-start}
+ #panel h1{font-size:38px}#panel .sub{font-size:18px;margin:6px 0 10px}#panel .tx{font-size:16px}
+ #light{padding:56px 8px 12px}#lp,#ln{top:auto;bottom:6px}
+ #reelui{bottom:18px}
+}
+
+#fallback{display:none}body.nogl #fallback{display:block;position:fixed;inset:auto 0 0;z-index:8;padding:18px;text-align:center;background:#000d;color:#fcf2e0}body.nogl #skip{display:none}
+
+@media (min-width:761px) and (max-width:1120px){#reach .full{display:none}#reach .short{display:inline}}
